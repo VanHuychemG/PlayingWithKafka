@@ -1,0 +1,10 @@
+﻿{"namespace": "Kafka",
+ "type": "record",
+ "name": "FaultyOrganisation",
+ "fields": [
+	 {"name": "id", "type": "string"},
+     {"name": "name", "type": "string"},
+     {"name": "shortName",  "type": ["string", "null"]},
+     {"name": "ovoNumber", "type": ["string", "null"]}
+ ]
+}
