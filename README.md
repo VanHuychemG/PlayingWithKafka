@@ -45,4 +45,4 @@ docker run -d --name schema-registry -p 8081:8081 --link zookeeper:zookeeper --l
 
 ```bash
 docker run -d --name rest-proxy -p 8082:8082 --link zookeeper:zookeeper --link kafka:kafka --link schema-registry:schema-registry confluent/rest-proxy
-```"# PlayingWithKafka" 
+```

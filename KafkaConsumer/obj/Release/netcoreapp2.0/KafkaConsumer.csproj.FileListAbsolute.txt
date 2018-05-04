@@ -1,0 +1,10 @@
+C:\PROJECTDATA\AGIV\KafkaConsumer\bin\Release\netcoreapp2.0\KafkaConsumer.deps.json
+C:\PROJECTDATA\AGIV\KafkaConsumer\bin\Release\netcoreapp2.0\KafkaConsumer.runtimeconfig.json
+C:\PROJECTDATA\AGIV\KafkaConsumer\bin\Release\netcoreapp2.0\KafkaConsumer.runtimeconfig.dev.json
+C:\PROJECTDATA\AGIV\KafkaConsumer\bin\Release\netcoreapp2.0\KafkaConsumer.dll
+C:\PROJECTDATA\AGIV\KafkaConsumer\bin\Release\netcoreapp2.0\KafkaConsumer.pdb
+C:\PROJECTDATA\AGIV\KafkaConsumer\obj\Release\netcoreapp2.0\KafkaConsumer.csproj.CoreCompileInputs.cache
+C:\PROJECTDATA\AGIV\KafkaConsumer\obj\Release\netcoreapp2.0\KafkaConsumer.AssemblyInfoInputs.cache
+C:\PROJECTDATA\AGIV\KafkaConsumer\obj\Release\netcoreapp2.0\KafkaConsumer.AssemblyInfo.cs
+C:\PROJECTDATA\AGIV\KafkaConsumer\obj\Release\netcoreapp2.0\KafkaConsumer.dll
+C:\PROJECTDATA\AGIV\KafkaConsumer\obj\Release\netcoreapp2.0\KafkaConsumer.pdb

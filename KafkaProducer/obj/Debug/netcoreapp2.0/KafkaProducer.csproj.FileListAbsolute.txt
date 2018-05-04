@@ -1,0 +1,11 @@
+C:\PROJECTDATA\PLAYGROUND\PlayingWithKafka\KafkaProducer\bin\Debug\netcoreapp2.0\KafkaProducer.deps.json
+C:\PROJECTDATA\PLAYGROUND\PlayingWithKafka\KafkaProducer\bin\Debug\netcoreapp2.0\KafkaProducer.runtimeconfig.json
+C:\PROJECTDATA\PLAYGROUND\PlayingWithKafka\KafkaProducer\bin\Debug\netcoreapp2.0\KafkaProducer.runtimeconfig.dev.json
+C:\PROJECTDATA\PLAYGROUND\PlayingWithKafka\KafkaProducer\bin\Debug\netcoreapp2.0\KafkaProducer.dll
+C:\PROJECTDATA\PLAYGROUND\PlayingWithKafka\KafkaProducer\bin\Debug\netcoreapp2.0\KafkaProducer.pdb
+C:\PROJECTDATA\PLAYGROUND\PlayingWithKafka\KafkaProducer\obj\Debug\netcoreapp2.0\KafkaProducer.csprojResolveAssemblyReference.cache
+C:\PROJECTDATA\PLAYGROUND\PlayingWithKafka\KafkaProducer\obj\Debug\netcoreapp2.0\KafkaProducer.csproj.CoreCompileInputs.cache
+C:\PROJECTDATA\PLAYGROUND\PlayingWithKafka\KafkaProducer\obj\Debug\netcoreapp2.0\KafkaProducer.AssemblyInfoInputs.cache
+C:\PROJECTDATA\PLAYGROUND\PlayingWithKafka\KafkaProducer\obj\Debug\netcoreapp2.0\KafkaProducer.AssemblyInfo.cs
+C:\PROJECTDATA\PLAYGROUND\PlayingWithKafka\KafkaProducer\obj\Debug\netcoreapp2.0\KafkaProducer.dll
+C:\PROJECTDATA\PLAYGROUND\PlayingWithKafka\KafkaProducer\obj\Debug\netcoreapp2.0\KafkaProducer.pdb
