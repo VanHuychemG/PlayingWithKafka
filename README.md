@@ -1,4 +1,4 @@
-# Playing with Kafka
+﻿# Playing with Kafka
 
 ## Setting up Kafka with Docker
 
@@ -45,4 +45,15 @@ docker run -d --name schema-registry -p 8081:8081 --link zookeeper:zookeeper --l
 
 ```bash
 docker run -d --name rest-proxy -p 8082:8082 --link zookeeper:zookeeper --link kafka:kafka --link schema-registry:schema-registry confluent/rest-proxy
+```
+
+### Generate C# classes from AVRO schemas
+
+#### Avrogen
+
+https://github.com/confluentinc/avro/releases/download/v1.7.7.4/avrogen.zip
+
+```bash
+C:\PROJECTDATA\PLAYGROUND\PlayingWithKafka\Kafka (master)
+λ dotnet ..\Avrogen\avrogen.dll -s Organisation.asvc .
 ```

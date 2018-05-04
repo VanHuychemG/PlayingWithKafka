@@ -1,34 +1,66 @@
-﻿namespace KafkaProducer
+﻿using AutoFixture;
+using Avro;
+using Confluent.Kafka;
+using Confluent.Kafka.Serialization;
+using Confluent.SchemaRegistry;
+using Kafka;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Threading;
+
+namespace KafkaProducer
 {
-    using Confluent.Kafka;
-    using Confluent.Kafka.Serialization;
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
 
     public class Program
     {
         private static void Main()
         {
-            var config = new Dictionary<string, object>
+            var schemaRegistryConfig = new Dictionary<string, object>
+             {
+                { "schema.registry.url", "localhost:8081" },
+                { "schema.registry.connection.timeout.ms", 5000 }, // optional
+                { "schema.registry.max.cached.schemas", 10 } // optional
+             };
+
+            var producerConfig = new Dictionary<string, object>
             {
-                {"bootstrap.servers", "localhost:9092"}
+                { "schema.registry.url", "localhost:8081" },
+                { "bootstrap.servers", "localhost:9092" }
             };
 
             Console.WriteLine("Producer ready...");
-            Console.WriteLine("Type some text and hit enter...");
 
-            using (var producer = new Producer<Null, string>(config, null, new StringSerializer(Encoding.UTF8)))
+            using (var schemaRegistryClient = new CachedSchemaRegistryClient(schemaRegistryConfig))
             {
-                string text = null;
+                var s = (RecordSchema)Avro.Schema.Parse(File.ReadAllText(@"C:\PROJECTDATA\PLAYGROUND\PlayingWithKafka\Kafka\Organisation.asvc"));
+                schemaRegistryClient.RegisterSchemaAsync("organisation-topic-schema", s.ToString());
 
-                while (text != "exit")
+                using (var producer = new Producer<string, Organisation>(producerConfig, new AvroSerializer<string>(), new AvroSerializer<Organisation>()))
                 {
-                    text = Console.ReadLine();
-                    producer.ProduceAsync("hello-topic", null, text);
-                }
+                    var cancelled = false;
 
-                producer.Flush(100);
+                    Console.CancelKeyPress += (_, e) =>
+                    {
+                        e.Cancel = true; // prevent the process from terminating.
+                        cancelled = true;
+                    };
+
+                    while (!cancelled)
+                    {
+                        var fixture = new Fixture();
+
+                        var organisation = fixture.Build<Organisation>().Create();
+
+                        var deliveryReport = producer.ProduceAsync("organisation-topic", organisation.id, organisation);
+
+                        var result = deliveryReport.Result; // synchronously waits for message to be produced.
+
+                        Console.WriteLine($"Partition: {result.Partition}, Offset: {result.Offset}");
+
+                        Thread.Sleep(500);
+                    }
+                }
             }
         }
     }
