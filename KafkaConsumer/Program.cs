@@ -21,8 +21,7 @@ namespace KafkaConsumer
             };
 
             var consumerConfig = new Dictionary<string, object>
-            {
-                { "schema.registry.url", "localhost:8081" },
+            {                
                 {"group.id", "organisation-consumer"},
                 {"bootstrap.servers", "localhost:9092"},
                 {"enable.auto.commit", "false"}
@@ -32,7 +31,7 @@ namespace KafkaConsumer
 
             using (var schemaRegistryClient = new CachedSchemaRegistryClient(schemaRegistryConfig))
             {
-                using (var consumer = new Consumer<string, Organisation>(consumerConfig, new AvroDeserializer<string>(), new AvroDeserializer<Organisation>()))
+                using (var consumer = new Consumer<string, Organisation>(consumerConfig, new AvroDeserializer<string>(schemaRegistryClient), new AvroDeserializer<Organisation>(schemaRegistryClient)))
                 {
                     consumer.OnMessage += (o, e)
                         => Console.WriteLine($"organisation key name: {e.Key}, organisation value name: {e.Value.name}");

@@ -19,6 +19,7 @@ docker stop zookeeper | xargs docker rm
 docker stop kafka | xargs docker rm
 docker stop schema-registry | xargs docker rm
 docker stop rest-proxy | xargs docker rm
+docker stop schema-registry-ui | xargs docker rm
 ```
 
 #### Start Zookeeper and expose port 2181 for use by the host machine
@@ -46,6 +47,14 @@ docker run -d --name schema-registry -p 8081:8081 --link zookeeper:zookeeper --l
 ```bash
 docker run -d --name rest-proxy -p 8082:8082 --link zookeeper:zookeeper --link kafka:kafka --link schema-registry:schema-registry confluent/rest-proxy
 ```
+
+#### Start Schema Registry UI and expose port 8000 for use by the host machine
+
+```bash
+docker run -d --name schema-registry-ui -p 8000:8000 -e "SCHEMAREGISTRY_URL=http://localhost:8081" landoop/schema-registry-ui
+```
+
+*Don't forget to enable cross-origin resource sharing.*
 
 ### Generate C# classes from AVRO schemas
 
