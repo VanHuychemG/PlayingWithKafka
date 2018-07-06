@@ -14,11 +14,6 @@ using Xunit;
 
 namespace KafkaProducer.Services
 {
-    public interface IKafkaProducerService
-    {
-        void Produce();
-    }
-
     public class KafkaProducerService : IKafkaProducerService
     {
         private readonly KafkaProducerConfiguration _producerConfiguration;
@@ -63,7 +58,7 @@ namespace KafkaProducer.Services
 
             using (var schemaRegistryClient = new CachedSchemaRegistryClient(_producerConfiguration.SchemaRegistryConfiguration))
             {
-                using (var producer = new Producer<string, Organisation>(_producerConfiguration.GlobalConfiguration, new AvroSerializer<string>(schemaRegistryClient), new AvroSerializer<Organisation>(schemaRegistryClient)))
+                using (var producer = new Producer<string, Organisation>(_producerConfiguration.ProducerConfiguration, new AvroSerializer<string>(schemaRegistryClient), new AvroSerializer<Organisation>(schemaRegistryClient)))
                 {
                     var cancelled = false;
 

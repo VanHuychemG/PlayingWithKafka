@@ -1,21 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using Confluent.Kafka;
+﻿using Confluent.Kafka;
 using Confluent.Kafka.Serialization;
 using Confluent.SchemaRegistry;
 using Kafka;
-using Kafka.Infrastructure.Configuration;
 using KafkaConsumer.Infrastructure.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using System;
 
 namespace KafkaConsumer.Services
 {
-    public interface IKafkaConsumerService
-    {
-        void Consume();
-    }
-
     public class KafkaConsumerService : IKafkaConsumerService
     {
         private readonly KafkaConsumerConfiguration _consumerConfiguration;
