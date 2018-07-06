@@ -54,7 +54,19 @@ docker run -d --name rest-proxy -p 8082:8082 --link zookeeper:zookeeper --link k
 docker run -d --name schema-registry-ui -p 8000:8000 -e "SCHEMAREGISTRY_URL=http://localhost:8081" landoop/schema-registry-ui
 ```
 
+#### Start Kafka topics UI and expose port 8080 for use by the host machine
+
+```bash
+docker run -d -p 8080:8000 -e "KAFKA_REST_PROXY_URL=http://localhost:8082" -e "PROXY=true" landoop/kafka-topics-ui
+```
+
 *Don't forget to enable cross-origin resource sharing.*
+
+### All-in-one solution `Lenses`
+
+```bash
+docker run -e ADV_HOST=127.0.0.1 -e EULA="https://dl.lenses.stream/d/?id=[LICENSEKEY]" --rm -p 3030:3030 -p 9092:9092 -p 2181:2181 -p 8081:8081 -p 9581:9581 -p 9582:9582 -p 9584:9584 -p 9585:9585 landoop/kafka-lenses-dev
+```
 
 ### Generate C# classes from AVRO schemas
 

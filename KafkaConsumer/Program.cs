@@ -1,74 +1,53 @@
-﻿using Avro;
-using Confluent.Kafka;
-using Confluent.Kafka.Serialization;
-using Confluent.SchemaRegistry;
-using Kafka;
-using System;
-using System.Collections.Generic;
+﻿using KafkaConsumer.Infrastructure.Configuration;
+using KafkaConsumer.Services;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System.IO;
 
 namespace KafkaConsumer
 {
     public class Program
     {
-        private static void Main()
+        public static void Main(string[] args)
         {
-            var schemaRegistryConfig = new Dictionary<string, object>
-            {
-                { "schema.registry.url", "localhost:8081" },
-                { "schema.registry.connection.timeout.ms", 5000 }, // optional
-                { "schema.registry.max.cached.schemas", 10 } // optional
-            };
+            var services = new ServiceCollection();
 
-            var consumerConfig = new Dictionary<string, object>
-            {                
-                {"group.id", "organisation-consumer"},
-                {"bootstrap.servers", "localhost:9092"},
-                {"enable.auto.commit", "false"}
-            };
+            ConfigureServices(services);
 
-            Console.WriteLine("Consumer ready...");
+            var serviceProvider = services.BuildServiceProvider();
 
-            using (var schemaRegistryClient = new CachedSchemaRegistryClient(schemaRegistryConfig))
-            {
-                using (var consumer = new Consumer<string, Organisation>(consumerConfig, new AvroDeserializer<string>(schemaRegistryClient), new AvroDeserializer<Organisation>(schemaRegistryClient)))
-                {
-                    consumer.OnMessage += (o, e)
-                        => Console.WriteLine($"organisation key name: {e.Key}, organisation value name: {e.Value.name}");
+            var app = serviceProvider.GetService<Application>();
 
-                    consumer.OnError += (_, e)
-                        => Console.WriteLine("Error: " + e.Reason);
+            app.Run();
+        }
 
-                    consumer.OnConsumeError += (_, e)
-                        => Console.WriteLine("Consume error: " + e.Error.Reason);
+        private static void ConfigureServices(IServiceCollection services)
+        {
+            var loggerFactory = new LoggerFactory()
+                .AddConsole()
+                .AddDebug();
 
-                    consumer.Subscribe("organisation-topic");
+            services.AddSingleton(loggerFactory);
+            services.AddLogging();
 
-                    Console.WriteLine($"Subscribed to: [{string.Join(", ", consumer.Subscription)}]");
+            var configuration = GetConfiguration();
+            services.AddSingleton<IConfiguration>(configuration);
 
-                    var cancelled = false;
+            services.AddOptions();
+            services.Configure<KafkaConsumerConfiguration>(configuration.GetSection(KafkaConsumerConfiguration.Section));
 
-                    Console.CancelKeyPress += (_, e) =>
-                    {
-                        e.Cancel = true; // prevent the process from terminating.
-                        cancelled = true;
-                    };
+            services.AddSingleton<IKafkaConsumerService, KafkaConsumerService>();
+            services.AddTransient<Application>();
+        }
 
-                    while (!cancelled)
-                    {
-                        if (!consumer.Consume(out var msg, TimeSpan.FromSeconds(1)))
-                            continue;
+        private static IConfigurationRoot GetConfiguration()
+        {
+            var configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: true);
 
-                        Console.WriteLine($"Topic: {msg.Topic} Partition: {msg.Partition} Offset: {msg.Offset} {msg.Value.name}");
-
-                        if (msg.Offset % 5 != 0) continue;
-
-                        Console.WriteLine($"Committing offset");
-                        var committedOffsets = consumer.CommitAsync(msg).Result;
-                        Console.WriteLine($"Committed offset: {committedOffsets}");
-                    }
-                }
-            }
+            return configuration.Build();
         }
     }
 }
